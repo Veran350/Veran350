@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');  // For hashing passwords
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
+const axios = require('axios');  // For making requests to Monify API
 const User = require('./models/User');  // Import the User model
 const Product = require('./models/Product');
 const Activity = require('./models/Activity'); // Model for activity logs
@@ -174,6 +175,48 @@ app.get('/seller-dashboard', isSeller, (req, res) => {
 // Buyer-specific route (only accessible if logged in as buyer)
 app.get('/buyer-dashboard', isBuyer, (req, res) => {
     res.send('Welcome to the Buyer Dashboard');
+});
+
+// **Monify Payment Routes**
+
+const MONIFY_API_URL = 'https://api.monify.com'; // Replace with the actual Monify API URL
+const MONIFY_SECRET_KEY = 'your_monify_secret_key'; // Replace with your Monify secret key
+
+// Create a payment route to interact with Monify's API
+app.post('/create-payment', async (req, res) => {
+    const { amount, currency, orderId, customerEmail } = req.body;
+
+    try {
+        // Request for payment creation from Monify API
+        const response = await axios.post(`${MONIFY_API_URL}/v1/createPayment`, {
+            amount: amount * 100,  // Monify may require amount in the smallest currency unit (e.g., cents)
+            currency: currency || 'USD',
+            order_id: orderId,
+            customer_email: customerEmail,
+            secret_key: MONIFY_SECRET_KEY,  // Send your secret key with the request
+        });
+
+        const { paymentUrl } = response.data;  // Monify should return a payment URL
+
+        // Send the payment URL to the frontend to redirect the user to Monify for payment
+        res.json({ paymentUrl });
+    } catch (error) {
+        console.error('Error creating payment:', error);
+        res.status(500).send('Error creating payment');
+    }
+});
+
+// Route to handle payment success (Monify sends payment status here)
+app.post('/payment-success', async (req, res) => {
+    const { paymentStatus, transactionId } = req.body;
+
+    // You can use paymentStatus to verify if the transaction was successful
+    if (paymentStatus === 'SUCCESS') {
+        // Save the payment details in the database or update the order status
+        res.send('Payment was successful');
+    } else {
+        res.send('Payment failed or canceled');
+    }
 });
 
 // Start the server
