@@ -6,6 +6,7 @@ const session = require('express-session');
 const passport = require('passport');
 const User = require('./models/User');  // Import the User model
 const Product = require('./models/Product');
+const Activity = require('./models/Activity'); // Model for activity logs
 require('./config/passport')(passport); // Configure Passport.js
 
 const app = express();
@@ -41,46 +42,64 @@ app.get('/products', async (req, res) => {
     }
 });
 
-// Routes for user authentication
-// Signup Route
-app.post('/signup', async (req, res) => {
+// Admin authentication (hardcoded)
+const ADMIN_EMAIL = 'admin@example.com';
+const ADMIN_PASSWORD = 'admin123';
+
+// Admin login route (just for testing purposes)
+app.post('/admin-login', (req, res) => {
     const { email, password } = req.body;
 
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        req.session.isAdmin = true; // Set admin session flag
+        return res.redirect('/admin');
+    }
+
+    res.status(401).send('Invalid credentials');
+});
+
+// Middleware to check if the user is an admin
+function isAdmin(req, res, next) {
+    if (req.session.isAdmin) {
+        return next();
+    } else {
+        res.status(403).send('Access denied. Admins only.');
+    }
+}
+
+// Admin routes (only accessible if logged in as admin)
+app.get('/admin', isAdmin, async (req, res) => {
     try {
-        // Check if the user already exists
-        const existingUser = await User.findOne({ email: email });
-        if (existingUser) {
-            return res.status(400).send('User already exists');
-        }
-
-        // Create new user
-        const newUser = new User({ email, password });
-        await newUser.save();
-
-        // Redirect to login
-        res.status(201).send('User created, you can now log in');
+        const users = await User.find();
+        const products = await Product.find();
+        const activities = await Activity.find();
+        
+        res.json({
+            users,
+            products,
+            activities
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error signing up');
+        res.status(500).send('Error fetching admin data');
     }
 });
 
-// Login Route
-app.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-}));
+// Example route to log activities (e.g., product added)
+app.post('/log-activity', async (req, res) => {
+    const { action, details } = req.body;
 
-// Logout Route
-app.get('/logout', (req, res) => {
-    req.logout(function(err) {
-        if (err) { return next(err); }
-        res.redirect('/');
-    });
+    try {
+        const newActivity = new Activity({ action, details });
+        await newActivity.save();
+        res.status(201).send('Activity logged');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error logging activity');
+    }
 });
 
-// Inserting sample products when the server starts (for seeding)
+// Route to insert sample products when the server starts (for seeding)
 const seedData = async () => {
     const products = [
         { name: "Product 1", price: 29.99, description: "Description of product 1", imageUrl: "https://via.placeholder.com/150" },
