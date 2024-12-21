@@ -1,50 +1,51 @@
-// Fetch products from the backend API and display them
-document.addEventListener('DOMContentLoaded', async () => {
-    const productsContainer = document.getElementById('products-container');
-    const cartCount = document.getElementById('cart-count');
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
 
-    // Load cart data from localStorage
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+const app = express();
+const PORT = 3000;
 
-    // Function to update cart count in the header
-    const updateCartCount = () => {
-        cartCount.textContent = cart.length;
-    };
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-    // Update cart count on page load
-    updateCartCount();
-
-    try {
-        const response = await fetch('http://localhost:3000/products');
-        const products = await response.json();
-
-        products.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
-
-            productCard.innerHTML = `
-                <img src="${product.imageUrl}" alt="${product.name}">
-                <h3>${product.name}</h3>
-                <p>${product.description}</p>
-                <p class="price">$${product.price}</p>
-                <button class="add-to-cart">Add to Cart</button>
-            `;
-
-            // Add event listener for Add to Cart button
-            const addToCartButton = productCard.querySelector('.add-to-cart');
-            addToCartButton.addEventListener('click', () => {
-                // Add product to cart
-                cart.push(product);
-                localStorage.setItem('cart', JSON.stringify(cart));
-
-                // Update the cart count in the header
-                updateCartCount();
-            });
-
-            // Append product card to the container
-            productsContainer.appendChild(productCard);
-        });
-    } catch (error) {
-        console.error('Error fetching products:', error);
+// Mock products data
+const products = [
+    {
+        id: 1,
+        name: 'Product 1',
+        description: 'Description for Product 1',
+        price: 10.99,
+        imageUrl: 'https://via.placeholder.com/150'
+    },
+    {
+        id: 2,
+        name: 'Product 2',
+        description: 'Description for Product 2',
+        price: 20.99,
+        imageUrl: 'https://via.placeholder.com/150'
+    },
+    {
+        id: 3,
+        name: 'Product 3',
+        description: 'Description for Product 3',
+        price: 30.99,
+        imageUrl: 'https://via.placeholder.com/150'
     }
+];
+
+// API endpoint to fetch products
+app.get('/products', (req, res) => {
+    res.json(products);
+});
+
+// Route to serve the main HTML file
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
