@@ -12,6 +12,18 @@ header {
     text-align: center;
 }
 
+.cart {
+    font-size: 1.2em;
+    color: #333;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
 #products-container {
     display: flex;
     flex-wrap: wrap;
