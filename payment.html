@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monify Payment</title>
+</head>
+<body>
+    <h1>Complete Your Payment</h1>
+
+    <form id="payment-form">
+        <label for="amount">Amount (USD):</label>
+        <input type="number" id="amount" name="amount" required />
+        <button type="submit">Pay Now</button>
+    </form>
+
+    <div id="payment-message"></div>
+
+    <script>
+        const form = document.getElementById('payment-form');
+        
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const amount = document.getElementById('amount').value;
+            const orderId = 'order_' + Math.random().toString(36).substring(7);  // Generate a random order ID
+            const customerEmail = 'customer@example.com';  // Replace with actual customer email
+
+            try {
+                // Make the request to the backend to create the payment
+                const response = await fetch('/create-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount, orderId, customerEmail })
+                });
+
+                const { paymentUrl } = await response.json();
+
+                // Redirect to Monify's payment page
+                window.location.href = paymentUrl;
+            } catch (error) {
+                document.getElementById('payment-message').innerText = 'Payment failed: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
