@@ -2,15 +2,28 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const bodyParser = require('body-parser');
-const Product = require('./models/Product'); // Your product model
+const session = require('express-session');
+const passport = require('passport');
+const User = require('./models/User');  // Import the User model
+const Product = require('./models/Product');
+require('./config/passport')(passport); // Configure Passport.js
 
 const app = express();
 
 // Middleware
 app.use(bodyParser.json());
-
-// Serve static files from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Session middleware
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true
+}));
+
+// Initialize Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/shopify-clone', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -26,6 +39,45 @@ app.get('/products', async (req, res) => {
         console.error(error);
         res.status(500).send('Error fetching products');
     }
+});
+
+// Routes for user authentication
+// Signup Route
+app.post('/signup', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Check if the user already exists
+        const existingUser = await User.findOne({ email: email });
+        if (existingUser) {
+            return res.status(400).send('User already exists');
+        }
+
+        // Create new user
+        const newUser = new User({ email, password });
+        await newUser.save();
+
+        // Redirect to login
+        res.status(201).send('User created, you can now log in');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error signing up');
+    }
+});
+
+// Login Route
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
+
+// Logout Route
+app.get('/logout', (req, res) => {
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.redirect('/');
+    });
 });
 
 // Inserting sample products when the server starts (for seeding)
