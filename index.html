@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopify Clone - Home</title>
+    <title>Shopify Clone</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -13,24 +13,28 @@
             <a href="/" class="logo">Shopify Clone</a>
             <nav>
                 <ul>
-                    <li><a href="/login.html">Login</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/products.html">Products</a></li>
                     <li><a href="/signup.html">Sign Up</a></li>
+                    <li><a href="/login.html">Login</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main>
+        <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
                 <h1>Welcome to Our Online Store</h1>
-                <p>Shop the best products from around the world</p>
-                <a href="/products.html" class="cta-button">Shop Now</a>
+                <p>Your favorite products, now at your fingertips.</p>
+                <a href="/products.html" class="cta-button">Start Shopping</a>
             </div>
         </section>
 
-        <section class="product-list container">
-            <h2>Featured Products</h2>
+        <!-- Product Grid Section -->
+        <section class="product-grid container">
+            <h2>Shop Our Products</h2>
             <div class="product-card">
                 <img src="images/product1.jpg" alt="Product 1">
                 <div class="product-info">
@@ -60,8 +64,16 @@
         </section>
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 Shopify Clone. All rights reserved.</p>
+        <div class="container">
+            <ul>
+                <li><a href="/about.html">About Us</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/privacy.html">Privacy Policy</a></li>
+            </ul>
+            <p>&copy; 2024 Shopify Clone. All rights reserved.</p>
+        </div>
     </footer>
 </body>
 </html>
