@@ -3,56 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Admin Panel - MaoElementary</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1DB954;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1DB954;
+            color: white;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Admin Panel</h1>
+    </header>
+    <div class="container">
+        <h2>Users</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populate user data dynamically -->
+            </tbody>
+        </table>
 
-    <h2>Admin Panel</h2>
+        <h2>Products</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populate product data dynamically -->
+            </tbody>
+        </table>
 
-    <h3>Users</h3>
-    <ul id="users">
-        <!-- List of users will appear here -->
-    </ul>
-
-    <h3>Products</h3>
-    <ul id="products">
-        <!-- List of products will appear here -->
-    </ul>
-
-    <h3>Activity Logs</h3>
-    <ul id="activities">
-        <!-- List of activity logs will appear here -->
-    </ul>
-
-    <script>
-        // Fetch admin data (users, products, activities)
-        fetch('/admin')
-            .then(response => response.json())
-            .then(data => {
-                const usersList = document.getElementById('users');
-                const productsList = document.getElementById('products');
-                const activitiesList = document.getElementById('activities');
-
-                data.users.forEach(user => {
-                    const userItem = document.createElement('li');
-                    userItem.textContent = `Email: ${user.email}`;
-                    usersList.appendChild(userItem);
-                });
-
-                data.products.forEach(product => {
-                    const productItem = document.createElement('li');
-                    productItem.textContent = `${product.name} - $${product.price}`;
-                    productsList.appendChild(productItem);
-                });
-
-                data.activities.forEach(activity => {
-                    const activityItem = document.createElement('li');
-                    activityItem.textContent = `${activity.action}: ${activity.details}`;
-                    activitiesList.appendChild(activityItem);
-                });
-            })
-            .catch(error => console.error('Error fetching admin data:', error));
-    </script>
-
+        <h2>Activities</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populate activity data dynamically -->
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
