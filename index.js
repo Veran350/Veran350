@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
+const bcrypt = require('bcryptjs');  // For hashing passwords
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
@@ -118,6 +118,65 @@ const seedData = async () => {
 // Call the seed function to add products when the server starts
 seedData();
 
+// **Routes for Buyer/Seller Registration and Login**
+
+app.post('/signup', async (req, res) => {
+    const { email, password, role, name } = req.body;
+
+    // Ensure role is either buyer or seller
+    if (!['buyer', 'seller'].includes(role)) {
+        return res.status(400).send('Invalid role');
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({
+            email,
+            password: hashedPassword,
+            role,
+            name
+        });
+
+        await newUser.save();
+        res.status(201).send('User registered successfully');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error registering user');
+    }
+});
+
+// Login route (use passport for authentication)
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
+    res.send('Logged in successfully');
+});
+
+// **Role-based Access (Optional)**
+
+function isSeller(req, res, next) {
+    if (req.user && req.user.role === 'seller') {
+        return next();
+    }
+    res.status(403).send('Access denied. Sellers only.');
+}
+
+function isBuyer(req, res, next) {
+    if (req.user && req.user.role === 'buyer') {
+        return next();
+    }
+    res.status(403).send('Access denied. Buyers only.');
+}
+
+// Seller-specific route (only accessible if logged in as seller)
+app.get('/seller-dashboard', isSeller, (req, res) => {
+    res.send('Welcome to the Seller Dashboard');
+});
+
+// Buyer-specific route (only accessible if logged in as buyer)
+app.get('/buyer-dashboard', isBuyer, (req, res) => {
+    res.send('Welcome to the Buyer Dashboard');
+});
+
+// Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
