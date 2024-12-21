@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 const bodyParser = require('body-parser');
 const Product = require('./models/Product'); // Your product model
 
@@ -7,6 +8,9 @@ const app = express();
 
 // Middleware
 app.use(bodyParser.json());
+
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/shopify-clone', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -21,21 +25,6 @@ app.get('/products', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching products');
-    }
-});
-
-// Route to get a product by ID
-app.get('/products/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const product = await Product.findById(id); // Find product by ID
-        if (!product) {
-            return res.status(404).send('Product not found');
-        }
-        res.json(product); // Send the single product as a JSON response
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error fetching product');
     }
 });
 
