@@ -83,6 +83,11 @@ header nav ul li a:hover {
     margin-bottom: 30px;
 }
 
+.hero .cta-buttons {
+    display: flex;
+    gap: 20px;
+}
+
 .hero .cta-button {
     background-color: #1DB954;
     color: white;
@@ -213,5 +218,10 @@ footer ul li a:hover {
 
     .product-card {
         width: 90%;
+    }
+
+    .hero .cta-buttons {
+        flex-direction: column;
+        gap: 10px;
     }
 }
