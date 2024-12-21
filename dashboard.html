@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MaoElementary</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 class="logo">MaoElementary</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="#" id="logout-button">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <main class="dashboard">
+        <h2>Welcome, User!</h2>
+        <p>Here are your options:</p>
+        <ul>
+            <li><a href="products.html">View Products</a></li>
+            <li><a href="profile.html">Update Profile</a></li>
+            <li><a href="orders.html">View Orders</a></li>
+        </ul>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MaoElementary. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Logout functionality
+        document.getElementById('logout-button').addEventListener('click', () => {
+            alert('You have been logged out.');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
