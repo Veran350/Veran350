@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const products = [
   { id: 1, name: "Product A", price: 50, image: "url_to_image" },
@@ -9,8 +9,26 @@ const products = [
 const Shop = () => {
   const [cart, setCart] = useState([]);
 
+  useEffect(() => {
+    // Fetch the cart from the server
+    fetch("http://localhost:3000/cart")
+      .then((response) => response.json())
+      .then((data) => setCart(data))
+      .catch((error) => console.error("Error fetching cart:", error));
+  }, []);
+
   const addToCart = (product) => {
-    setCart([...cart, product]);
+    // Send the request to the backend to add the product to the cart
+    fetch("http://localhost:3000/cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ productId: product.id }),
+    })
+      .then((response) => response.json())
+      .then((data) => setCart(data.cart))
+      .catch((error) => console.error("Error adding to cart:", error));
   };
 
   return (
