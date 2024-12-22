@@ -1,24 +1,29 @@
-// Firebase configuration
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCtV0SOxHn_P3KYy8rV4IpgYhKvrtqddLc",
-    authDomain: "maoelementary-c6e57.firebaseapp.com",
-    projectId: "maoelementary-c6e57",
-    storageBucket: "maoelementary-c6e57.appspot.com",
-    messagingSenderId: "471682560547",
-    appId: "1:471682560547:web:your-app-id"
+  apiKey: "AIzaSyAFyzUobF12L-QlVnklN-2uYKvhwqXdkyE",
+  authDomain: "veran350-b6c53.firebaseapp.com",
+  projectId: "veran350-b6c53",
+  storageBucket: "veran350-b6c53.firebasestorage.app",
+  messagingSenderId: "727775684680",
+  appId: "1:727775684680:web:80f53b3b9c4ec3b6b1107d",
+  measurementId: "G-EQE584VHBY"
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-// Sign up functionality
-document.getElementById("signup-form").addEventListener("submit", function(e) {
+// Sign-up functionality
+document.getElementById("signup-form").addEventListener("submit", function (e) {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    auth.createUserWithEmailAndPassword(email, password)
+    createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
             alert("Sign-up successful!");
             window.location.href = "shop.html"; // Redirect to shop page
@@ -28,13 +33,13 @@ document.getElementById("signup-form").addEventListener("submit", function(e) {
         });
 });
 
-// Sign in functionality
-document.getElementById("login-form").addEventListener("submit", function(e) {
+// Sign-in functionality
+document.getElementById("login-form").addEventListener("submit", function (e) {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    auth.signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(auth, email, password)
         .then(() => {
             alert("Login successful!");
             window.location.href = "shop.html"; // Redirect to shop page
