@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');  // For hashing passwords
+const bcrypt = require('bcryptjs'); // For hashing passwords
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
-const axios = require('axios');  // For making requests to Monify API
-const User = require('./models/User');  // Import the User model
+const axios = require('axios'); // For making requests to Monify API
+const User = require('./models/User'); // Import the User model
 const Product = require('./models/Product');
 const Activity = require('./models/Activity'); // Model for activity logs
 require('./config/passport')(passport); // Configure Passport.js
