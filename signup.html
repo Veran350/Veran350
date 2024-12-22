@@ -18,36 +18,38 @@
             <input type="password" id="password" required>
             
             <button type="submit" class="cta-button">Sign Up</button>
-            <p id="error-message" style="color: red;"></p>
+            <p id="error-message"></p>
         </form>
     </section>
 
+    <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <script>
+        // Firebase configuration
         const firebaseConfig = {
-    apiKey: "AIzaSyCtV0SOxHn_P3KYy8rV4IpgYhKvrtqddLc",
-    authDomain: "maoelementary-c6e57.firebaseapp.com",
-    projectId: "maoelementary-c6e57",
-    storageBucket: "maoelementary-c6e57.appspot.com",
-    messagingSenderId: "471682560547",
-    appId: "1:471682560547:web:your-app-id"
-};
+            apiKey: "AIzaSyCtV0SOxHn_P3KYy8rV4IpgYhKvrtqddLc",
+            authDomain: "maoelementary-c6e57.firebaseapp.com",
+            projectId: "maoelementary-c6e57",
+            storageBucket: "maoelementary-c6e57.appspot.com",
+            messagingSenderId: "471682560547",
+            appId: "1:471682560547:web:your-app-id"
+        };
 
-
+        // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
+        // Sign-Up functionality
         document.getElementById("signup-form").addEventListener("submit", function (e) {
             e.preventDefault();
-
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
                     alert("Sign-up successful!");
-                    window.location.href = "login.html";
+                    window.location.href = "login.html"; // Redirect to login page
                 })
                 .catch((error) => {
                     document.getElementById("error-message").textContent = error.message;
