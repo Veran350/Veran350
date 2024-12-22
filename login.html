@@ -17,8 +17,9 @@
             <input type="password" id="password" required>
             
             <button type="submit" class="cta-button">Login</button>
-            <p id="error-message"></p>
+            <p id="error-message" style="color: red;"></p>
         </form>
+        <button id="google-login" class="cta-button">Login with Google</button>
     </section>
 
     <!-- Firebase Scripts -->
@@ -48,6 +49,20 @@
             auth.signInWithEmailAndPassword(email, password)
                 .then(() => {
                     alert("Login successful!");
+                    window.location.href = "index.html"; // Redirect on success
+                })
+                .catch((error) => {
+                    document.getElementById("error-message").textContent = error.message;
+                });
+        });
+
+        // Google login functionality
+        document.getElementById("google-login").addEventListener("click", function () {
+            const provider = new firebase.auth.GoogleAuthProvider();
+
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    alert("Login successful with Google!");
                     window.location.href = "index.html"; // Redirect on success
                 })
                 .catch((error) => {
