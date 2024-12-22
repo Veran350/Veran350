@@ -43,6 +43,9 @@
             color: white;
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
     <header>
@@ -58,7 +61,7 @@
                     <th>Role</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="users-table">
                 <!-- Populate user data dynamically -->
             </tbody>
         </table>
@@ -72,7 +75,7 @@
                     <th>Price</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="products-table">
                 <!-- Populate product data dynamically -->
             </tbody>
         </table>
@@ -86,10 +89,74 @@
                     <th>Details</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="activities-table">
                 <!-- Populate activity data dynamically -->
             </tbody>
         </table>
     </div>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCtV0SOxHn_P3KYy8rV4IpgYhKvrtqddLc",
+            authDomain: "maoelementary-c6e57.firebaseapp.com",
+            projectId: "maoelementary-c6e57",
+            storageBucket: "maoelementary-c6e57.appspot.com",
+            messagingSenderId: "471682560547",
+            appId: "1:471682560547:web:your-app-id"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Example: Fetch and display users
+        db.collection("users").get().then((querySnapshot) => {
+            const usersTable = document.getElementById("users-table");
+            querySnapshot.forEach((doc) => {
+                const user = doc.data();
+                const row = `
+                    <tr>
+                        <td>${doc.id}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role || "User"}</td>
+                    </tr>
+                `;
+                usersTable.innerHTML += row;
+            });
+        });
+
+        // Example: Fetch and display products
+        db.collection("products").get().then((querySnapshot) => {
+            const productsTable = document.getElementById("products-table");
+            querySnapshot.forEach((doc) => {
+                const product = doc.data();
+                const row = `
+                    <tr>
+                        <td>${doc.id}</td>
+                        <td>${product.name}</td>
+                        <td>${product.price}</td>
+                    </tr>
+                `;
+                productsTable.innerHTML += row;
+            });
+        });
+
+        // Example: Fetch and display activities
+        db.collection("activities").get().then((querySnapshot) => {
+            const activitiesTable = document.getElementById("activities-table");
+            querySnapshot.forEach((doc) => {
+                const activity = doc.data();
+                const row = `
+                    <tr>
+                        <td>${doc.id}</td>
+                        <td>${activity.action}</td>
+                        <td>${activity.details}</td>
+                    </tr>
+                `;
+                activitiesTable.innerHTML += row;
+            });
+        });
+    </script>
 </body>
 </html>
