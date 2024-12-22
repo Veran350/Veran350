@@ -40,6 +40,25 @@
         </div>
     </section>
 
+    <!-- Product Management Section (added) -->
+    <section id="product-management" class="product-management">
+        <h2>Product Management</h2>
+        <button class="button" id="createProductBtn">Create Product</button>
+        <button class="button" id="getProductBtn">Get Product</button>
+
+        <div class="product-list">
+            <div class="product-item">
+                <span>Product 1</span>
+                <button class="button delete">Delete</button>
+            </div>
+            <div class="product-item">
+                <span>Product 2</span>
+                <button class="button delete">Delete</button>
+            </div>
+            <!-- More products will go here -->
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -69,6 +88,25 @@
                         }
                     });
             }
+        });
+
+        // Example for button event listeners
+        document.getElementById('createProductBtn').addEventListener('click', () => {
+            alert("Create Product form will appear.");
+            // You can redirect or show a form for creating a new product
+        });
+        
+        document.getElementById('getProductBtn').addEventListener('click', () => {
+            alert("View or search for a product.");
+            // You can show a search bar or list of products
+        });
+
+        const deleteButtons = document.querySelectorAll('.button.delete');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                alert("Delete this product?");
+                // Add delete logic here
+            });
         });
     </script>
 </body>
