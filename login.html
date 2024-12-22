@@ -4,54 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MaoElementary</title>
-    <!-- Link to updated style.css -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <h1 class="logo">MaoElementary</h1>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                    <li><a href="shop.html">Shop</a></li>
-                    <li><a href="login.html" class="login-btn">Login</a></li>
-                    <li><a href="signup.html" class="signup-btn">Sign Up</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
-    <!-- Login Section -->
     <section class="login">
         <h2>Login to Your Account</h2>
-        <form>
+        <form id="login-form">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" required>
             
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" required>
             
             <button type="submit" class="cta-button">Login</button>
+            <p id="error-message" style="color: red;"></p>
         </form>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 MaoElementary. All rights reserved.</p>
-            <ul>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="privacy-policy.html">Privacy Policy</a></li>
-            </ul>
-        </div>
-    </footer>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCtV0SOxHn_P3KYy8rV4IpgYhKvrtqddLc",
+            authDomain: "maoelementary-c6e57.firebaseapp.com",
+            projectId: "maoelementary-c6e57",
+            storageBucket: "maoelementary-c6e57.appspot.com",
+            messagingSenderId: "471682560547",
+            appId: "1:471682560547:web:your-app-id"
+        };
 
-    <script src="app.js"></script>
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        document.getElementById("login-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    alert("Login successful!");
+                    // Redirect to homepage or dashboard
+                    window.location.href = "index.html";
+                })
+                .catch((error) => {
+                    document.getElementById("error-message").textContent = error.message;
+                });
+        });
+    </script>
+
 </body>
 </html>
