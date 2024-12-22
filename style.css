@@ -202,40 +202,109 @@ footer ul li a:hover {
     text-decoration: underline;
 }
 
-/* Button Styling */
-.cta-button {
-    background-color: #1DB954;
-    color: white;
-    padding: 15px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+/* About Section */
+.about-section {
+    padding: 50px 15px;
+    background-color: #ffffff;
     text-align: center;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
-.cta-button:hover {
+.about-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.about-section p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.about-section img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 50%;
+    margin: 20px auto;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 40px;
+    background-color: #eef5f9;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.contact-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.contact-section form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contact-section label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.contact-section input,
+.contact-section textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.contact-section button {
+    background-color: #1DB954;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.contact-section button:hover {
     background-color: #148F3D;
 }
 
-/* Google Button Styling */
-#google-signup, #google-login {
-    background-color: #4285F4; /* Google blue */
-    color: white;
-    display: block;
-    margin: 15px auto;
-    padding: 15px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s ease;
+/* Privacy Section */
+.privacy-section {
+    padding: 40px;
+    background-color: #fefefe;
+    line-height: 1.8;
+    border-radius: 10px;
+    color: #555;
 }
 
-#google-signup:hover, #google-login:hover {
-    background-color: #357AE8;
+.privacy-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.privacy-section ul {
+    list-style: disc;
+    margin-left: 20px;
+    margin-top: 10px;
+    color: #555;
+}
+
+.privacy-section ul li {
+    margin-bottom: 10px;
 }
 
 /* Responsive Design */
@@ -259,5 +328,17 @@ footer ul li a:hover {
     .hero .cta-buttons {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .about-section img {
+        max-width: 200px;
+    }
+
+    .contact-section form {
+        padding: 0 15px;
+    }
+
+    .privacy-section {
+        padding: 30px 15px;
     }
 }
