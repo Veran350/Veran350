@@ -23,6 +23,9 @@
         </div>
     </header>
 
+    <!-- Admin Panel Link (Initially Hidden) -->
+    <a href="admin.html" id="admin-link" style="display:none; position: absolute; top: 20px; right: 20px; background-color: #1DB954; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Admin Panel</a>
+
     <!-- Hero Section -->
     <section class="hero">
         <h1>Welcome to MaoElementary</h1>
@@ -54,5 +57,19 @@
     </footer>
 
     <script src="app.js"></script>
+
+    <script>
+        // Check if user is an admin after login
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                firebase.firestore().collection('users').doc(user.uid).get()
+                    .then(doc => {
+                        if (doc.exists && doc.data().role === 'admin') {
+                            document.getElementById('admin-link').style.display = 'block'; // Show admin panel link
+                        }
+                    });
+            }
+        });
+    </script>
 </body>
 </html>
