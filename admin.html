@@ -98,25 +98,24 @@
     </div>
 
     <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
-    
-    <script>
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import { getAuth, onAuthStateChanged } from "firebase/auth";
+        import { getFirestore, collection, getDocs, doc, getDoc } from "firebase/firestore";
+        
         const firebaseConfig = {
-            apiKey: "AIzaSyCtV0SOxHn_P3KYy8rV4IpgYhKvrtqddLc",
-            authDomain: "maoelementary-c6e57.firebaseapp.com",
-            projectId: "maoelementary-c6e57",
-            storageBucket: "maoelementary-c6e57.appspot.com",
-            messagingSenderId: "471682560547",
-            appId: "1:471682560547:web:your-app-id"
+            apiKey: "AIzaSyAFyzUobF12L-QlVnklN-2uYKvhwqXdkyE",
+            authDomain: "veran350-b6c53.firebaseapp.com",
+            projectId: "veran350-b6c53",
+            storageBucket: "veran350-b6c53.firebasestorage.app",
+            messagingSenderId: "727775684680",
+            appId: "1:727775684680:web:80f53b3b9c4ec3b6b1107d",
+            measurementId: "G-EQE584VHBY"
         };
 
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const storage = firebase.storage();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
         // Show feedback message
         function showFeedback(message, success = true) {
@@ -128,6 +127,27 @@
                 feedback.style.display = 'none';
             }, 3000);
         }
+
+        // Firebase auth state check
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Fetch user role
+                getDoc(doc(db, 'users', user.uid)).then(docSnapshot => {
+                    if (docSnapshot.exists() && docSnapshot.data().role === 'admin') {
+                        // Admin is logged in, show admin actions
+                        fetchUsers();
+                        fetchProducts();
+                        fetchActivityLogs();
+                    } else {
+                        alert("You are not authorized to perform this action");
+                        // Optionally redirect or hide admin features
+                    }
+                });
+            } else {
+                // Not logged in, redirect to login page
+                window.location.href = '/login.html';  // Example: Redirect to login page
+            }
+        });
 
         // Create Product with Feedback
         document.getElementById("create-product-form").addEventListener("submit", function(e) {
@@ -176,9 +196,9 @@
 
         // Fetch users from Firestore
         function fetchUsers() {
-            db.collection('users').get().then((querySnapshot) => {
+            getDocs(collection(db, 'users')).then(querySnapshot => {
                 const userTableBody = document.getElementById("user-data");
-                querySnapshot.forEach((doc) => {
+                querySnapshot.forEach(doc => {
                     const user = doc.data();
                     userTableBody.innerHTML += `
                         <tr>
@@ -193,9 +213,9 @@
 
         // Fetch products from Firestore
         function fetchProducts() {
-            db.collection('products').get().then((querySnapshot) => {
+            getDocs(collection(db, 'products')).then(querySnapshot => {
                 const productTableBody = document.getElementById("product-data");
-                querySnapshot.forEach((doc) => {
+                querySnapshot.forEach(doc => {
                     const product = doc.data();
                     productTableBody.innerHTML += `
                         <tr>
@@ -210,9 +230,9 @@
 
         // Fetch activity logs from Firestore
         function fetchActivityLogs() {
-            db.collection('activityLogs').get().then((querySnapshot) => {
+            getDocs(collection(db, 'activityLogs')).then(querySnapshot => {
                 const activityTableBody = document.getElementById("activity-log");
-                querySnapshot.forEach((doc) => {
+                querySnapshot.forEach(doc => {
                     const log = doc.data();
                     activityTableBody.innerHTML += `
                         <tr>
@@ -224,11 +244,6 @@
                 });
             });
         }
-
-        // Call functions to fetch data
-        fetchUsers();
-        fetchProducts();
-        fetchActivityLogs();
     </script>
 </body>
 </html>
