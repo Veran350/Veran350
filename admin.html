@@ -31,6 +31,23 @@
             </form>
         </section>
 
+        <!-- Update Product Form -->
+        <section class="update-product">
+            <h2>Update Product</h2>
+            <form id="update-product-form">
+                <label for="update-name">Product Name:</label>
+                <input type="text" id="update-name" required>
+                
+                <label for="update-price">Price:</label>
+                <input type="number" id="update-price" required>
+                
+                <label for="update-description">Description:</label>
+                <textarea id="update-description" required></textarea>
+                
+                <button type="submit" class="cta-button">Update Product</button>
+            </form>
+        </section>
+
         <!-- Users Table -->
         <h2>Users</h2>
         <table>
@@ -177,6 +194,21 @@
             .catch(error => {
                 alert("Error: " + error.message);
             });
+        });
+
+        // Update Product (Add the logic in JavaScript as needed)
+        document.getElementById("update-product-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById("update-name").value;
+            const price = parseFloat(document.getElementById("update-price").value);
+            const description = document.getElementById("update-description").value;
+
+            const productUpdate = { name, price, description };
+
+            // Implement your logic to send this updated data to Firebase or your backend here.
+            alert("Product updated successfully!");
+            document.getElementById("update-product-form").reset();
         });
 
         // Call functions to fetch data
