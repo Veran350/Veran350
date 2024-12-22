@@ -92,6 +92,9 @@
                 <!-- Populate activity logs dynamically -->
             </tbody>
         </table>
+
+        <!-- Display Success/Error Messages -->
+        <div id="feedback-message" style="display: none;"></div>
     </div>
 
     <!-- Firebase Scripts -->
@@ -114,6 +117,62 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         const storage = firebase.storage();
+
+        // Show feedback message
+        function showFeedback(message, success = true) {
+            const feedback = document.getElementById('feedback-message');
+            feedback.style.display = 'block';
+            feedback.textContent = message;
+            feedback.style.color = success ? 'green' : 'red';
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 3000);
+        }
+
+        // Create Product with Feedback
+        document.getElementById("create-product-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById("product-name").value;
+            const description = document.getElementById("product-description").value;
+            const price = parseFloat(document.getElementById("product-price").value);
+            const imageUrl = document.getElementById("product-image").value;
+
+            const product = { name, description, price, imageUrl };
+
+            fetch('/api/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(product)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showFeedback("Product created successfully!", true);
+                    document.getElementById("create-product-form").reset();
+                } else {
+                    showFeedback("Failed to create product", false);
+                }
+            })
+            .catch(error => {
+                showFeedback("Error: " + error.message, false);
+            });
+        });
+
+        // Update Product (Add the logic in JavaScript as needed)
+        document.getElementById("update-product-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById("update-name").value;
+            const price = parseFloat(document.getElementById("update-price").value);
+            const description = document.getElementById("update-description").value;
+
+            const productUpdate = { name, price, description };
+
+            // Implement your logic to send this updated data to Firebase or your backend here.
+            alert("Product updated successfully!");
+            document.getElementById("update-product-form").reset();
+        });
 
         // Fetch users from Firestore
         function fetchUsers() {
@@ -165,51 +224,6 @@
                 });
             });
         }
-
-        // Create Product
-        document.getElementById("create-product-form").addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById("product-name").value;
-            const description = document.getElementById("product-description").value;
-            const price = parseFloat(document.getElementById("product-price").value);
-            const imageUrl = document.getElementById("product-image").value;
-
-            const product = { name, description, price, imageUrl };
-
-            fetch('/api/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(product)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Product created successfully!");
-                    document.getElementById("create-product-form").reset();
-                } else {
-                    alert("Failed to create product");
-                }
-            })
-            .catch(error => {
-                alert("Error: " + error.message);
-            });
-        });
-
-        // Update Product (Add the logic in JavaScript as needed)
-        document.getElementById("update-product-form").addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById("update-name").value;
-            const price = parseFloat(document.getElementById("update-price").value);
-            const description = document.getElementById("update-description").value;
-
-            const productUpdate = { name, price, description };
-
-            // Implement your logic to send this updated data to Firebase or your backend here.
-            alert("Product updated successfully!");
-            document.getElementById("update-product-form").reset();
-        });
 
         // Call functions to fetch data
         fetchUsers();
