@@ -43,9 +43,6 @@
             color: white;
         }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
     <header>
@@ -61,7 +58,7 @@
                     <th>Role</th>
                 </tr>
             </thead>
-            <tbody id="users-table">
+            <tbody id="user-data">
                 <!-- Populate user data dynamically -->
             </tbody>
         </table>
@@ -75,12 +72,12 @@
                     <th>Price</th>
                 </tr>
             </thead>
-            <tbody id="products-table">
+            <tbody id="product-data">
                 <!-- Populate product data dynamically -->
             </tbody>
         </table>
 
-        <h2>Activities</h2>
+        <h2>Activity Logs</h2>
         <table>
             <thead>
                 <tr>
@@ -89,11 +86,18 @@
                     <th>Details</th>
                 </tr>
             </thead>
-            <tbody id="activities-table">
-                <!-- Populate activity data dynamically -->
+            <tbody id="activity-log">
+                <!-- Populate activity logs dynamically -->
             </tbody>
         </table>
     </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    
     <script>
         // Firebase configuration
         const firebaseConfig = {
@@ -109,54 +113,63 @@
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
+        const storage = firebase.storage();
 
-        // Example: Fetch and display users
-        db.collection("users").get().then((querySnapshot) => {
-            const usersTable = document.getElementById("users-table");
-            querySnapshot.forEach((doc) => {
-                const user = doc.data();
-                const row = `
-                    <tr>
-                        <td>${doc.id}</td>
-                        <td>${user.email}</td>
-                        <td>${user.role || "User"}</td>
-                    </tr>
-                `;
-                usersTable.innerHTML += row;
+        // Fetch users from Firestore
+        function fetchUsers() {
+            db.collection('users').get().then((querySnapshot) => {
+                const userTableBody = document.getElementById("user-data");
+                querySnapshot.forEach((doc) => {
+                    const user = doc.data();
+                    userTableBody.innerHTML += `
+                        <tr>
+                            <td>${doc.id}</td>
+                            <td>${user.email}</td>
+                            <td>${user.role || 'User'}</td>
+                        </tr>
+                    `;
+                });
             });
-        });
+        }
 
-        // Example: Fetch and display products
-        db.collection("products").get().then((querySnapshot) => {
-            const productsTable = document.getElementById("products-table");
-            querySnapshot.forEach((doc) => {
-                const product = doc.data();
-                const row = `
-                    <tr>
-                        <td>${doc.id}</td>
-                        <td>${product.name}</td>
-                        <td>${product.price}</td>
-                    </tr>
-                `;
-                productsTable.innerHTML += row;
+        // Fetch products from Firestore
+        function fetchProducts() {
+            db.collection('products').get().then((querySnapshot) => {
+                const productTableBody = document.getElementById("product-data");
+                querySnapshot.forEach((doc) => {
+                    const product = doc.data();
+                    productTableBody.innerHTML += `
+                        <tr>
+                            <td>${doc.id}</td>
+                            <td>${product.name}</td>
+                            <td>${product.price}</td>
+                        </tr>
+                    `;
+                });
             });
-        });
+        }
 
-        // Example: Fetch and display activities
-        db.collection("activities").get().then((querySnapshot) => {
-            const activitiesTable = document.getElementById("activities-table");
-            querySnapshot.forEach((doc) => {
-                const activity = doc.data();
-                const row = `
-                    <tr>
-                        <td>${doc.id}</td>
-                        <td>${activity.action}</td>
-                        <td>${activity.details}</td>
-                    </tr>
-                `;
-                activitiesTable.innerHTML += row;
+        // Fetch activity logs from Firestore
+        function fetchActivityLogs() {
+            db.collection('activityLogs').get().then((querySnapshot) => {
+                const activityTableBody = document.getElementById("activity-log");
+                querySnapshot.forEach((doc) => {
+                    const log = doc.data();
+                    activityTableBody.innerHTML += `
+                        <tr>
+                            <td>${doc.id}</td>
+                            <td>${log.action}</td>
+                            <td>${log.details}</td>
+                        </tr>
+                    `;
+                });
             });
-        });
+        }
+
+        // Call functions to fetch data
+        fetchUsers();
+        fetchProducts();
+        fetchActivityLogs();
     </script>
 </body>
 </html>
