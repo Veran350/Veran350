@@ -100,17 +100,18 @@
     <script>
         // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyCtV0SOxHn_P3KYy8rV4IpgYhKvrtqddLc",
-            authDomain: "maoelementary-c6e57.firebaseapp.com",
-            projectId: "maoelementary-c6e57",
-            storageBucket: "maoelementary-c6e57.appspot.com",
-            messagingSenderId: "471682560547",
-            appId: "1:471682560547:web:your-app-id"
+            apiKey: "AIzaSyAFyzUobF12L-QlVnklN-2uYKvhwqXdkyE",
+            authDomain: "veran350-b6c53.firebaseapp.com",
+            projectId: "veran350-b6c53",
+            storageBucket: "veran350-b6c53.firebasestorage.app",
+            messagingSenderId: "727775684680",
+            appId: "1:727775684680:web:80f53b3b9c4ec3b6b1107d",
+            measurementId: "G-EQE584VHBY"
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
         // Sign-Up functionality
         document.getElementById("signup-form").addEventListener("submit", function (e) {
@@ -118,7 +119,7 @@
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
-            auth.createUserWithEmailAndPassword(email, password)
+            createUserWithEmailAndPassword(auth, email, password)
                 .then(() => {
                     alert("Sign-up successful!");
                     window.location.href = "shop.html"; // Redirect to the shop page
@@ -130,9 +131,9 @@
 
         // Google sign-up functionality
         document.getElementById("google-signup").addEventListener("click", function () {
-            const provider = new firebase.auth.GoogleAuthProvider();
+            const provider = new GoogleAuthProvider();
 
-            auth.signInWithPopup(provider)
+            signInWithPopup(auth, provider)
                 .then((result) => {
                     alert("Sign-up successful with Google!");
                     window.location.href = "index.html"; // Redirect to dashboard or homepage
