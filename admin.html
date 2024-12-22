@@ -4,51 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - MaoElementary</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #1DB954;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .container {
-            padding: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #1DB954;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>Admin Panel</h1>
     </header>
     <div class="container">
+        <!-- Create Product Form -->
+        <section class="create-product">
+            <h2>Create a New Product</h2>
+            <form id="create-product-form">
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" required>
+
+                <label for="product-description">Description:</label>
+                <textarea id="product-description" required></textarea>
+
+                <label for="product-price">Price:</label>
+                <input type="number" id="product-price" required>
+
+                <label for="product-image">Image URL:</label>
+                <input type="text" id="product-image" required>
+
+                <button type="submit" class="cta-button">Create Product</button>
+            </form>
+        </section>
+
+        <!-- Users Table -->
         <h2>Users</h2>
         <table>
             <thead>
@@ -63,6 +46,7 @@
             </tbody>
         </table>
 
+        <!-- Products Table -->
         <h2>Products</h2>
         <table>
             <thead>
@@ -77,6 +61,7 @@
             </tbody>
         </table>
 
+        <!-- Activity Logs Table -->
         <h2>Activity Logs</h2>
         <table>
             <thead>
@@ -99,7 +84,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
     
     <script>
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCtV0SOxHn_P3KYy8rV4IpgYhKvrtqddLc",
             authDomain: "maoelementary-c6e57.firebaseapp.com",
@@ -109,7 +93,6 @@
             appId: "1:471682560547:web:your-app-id"
         };
 
-        // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
@@ -165,6 +148,36 @@
                 });
             });
         }
+
+        // Create Product
+        document.getElementById("create-product-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById("product-name").value;
+            const description = document.getElementById("product-description").value;
+            const price = parseFloat(document.getElementById("product-price").value);
+            const imageUrl = document.getElementById("product-image").value;
+
+            const product = { name, description, price, imageUrl };
+
+            fetch('/api/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(product)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Product created successfully!");
+                    document.getElementById("create-product-form").reset();
+                } else {
+                    alert("Failed to create product");
+                }
+            })
+            .catch(error => {
+                alert("Error: " + error.message);
+            });
+        });
 
         // Call functions to fetch data
         fetchUsers();
