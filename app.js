@@ -35,9 +35,35 @@ const products = [
     }
 ];
 
+// Cart data (mock implementation)
+let cart = [];
+
 // API endpoint to fetch products
 app.get('/products', (req, res) => {
     res.json(products);
+});
+
+// API endpoint to add a product to the cart
+app.post('/cart', (req, res) => {
+    const { productId } = req.body;
+    const product = products.find((p) => p.id === productId);
+    if (product) {
+        cart.push(product);
+        res.status(201).json({ message: 'Product added to cart', cart });
+    } else {
+        res.status(404).json({ message: 'Product not found' });
+    }
+});
+
+// API endpoint to get the cart
+app.get('/cart', (req, res) => {
+    res.json(cart);
+});
+
+// API endpoint to clear the cart
+app.delete('/cart', (req, res) => {
+    cart = [];
+    res.json({ message: 'Cart cleared' });
 });
 
 // Route to serve the main HTML file
