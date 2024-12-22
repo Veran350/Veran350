@@ -121,7 +121,7 @@
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
                     alert("Sign-up successful!");
-                    window.location.href = "shop.html"; // Redirect to shop page after successful sign-up
+                    window.location.href = "shop.html"; // Redirect to the shop page
                 })
                 .catch((error) => {
                     document.getElementById("error-message").textContent = error.message;
@@ -135,7 +135,7 @@
             auth.signInWithPopup(provider)
                 .then((result) => {
                     alert("Sign-up successful with Google!");
-                    window.location.href = "shop.html"; // Redirect to shop page after successful Google sign-up
+                    window.location.href = "index.html"; // Redirect to dashboard or homepage
                 })
                 .catch((error) => {
                     document.getElementById("error-message").textContent = error.message;
