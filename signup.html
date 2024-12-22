@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <section class="signup">
         <h2>Create Your Account</h2>
         <form id="signup-form">
@@ -20,6 +19,7 @@
             <button type="submit" class="cta-button">Sign Up</button>
             <p id="error-message" style="color: red;"></p>
         </form>
+        <button id="google-signup" class="cta-button">Sign Up with Google</button>
     </section>
 
     <!-- Firebase Scripts -->
@@ -55,7 +55,20 @@
                     document.getElementById("error-message").textContent = error.message;
                 });
         });
-    </script>
 
+        // Google sign-up functionality
+        document.getElementById("google-signup").addEventListener("click", function () {
+            const provider = new firebase.auth.GoogleAuthProvider();
+
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    alert("Sign-up successful with Google!");
+                    window.location.href = "index.html"; // Redirect to dashboard or homepage
+                })
+                .catch((error) => {
+                    document.getElementById("error-message").textContent = error.message;
+                });
+        });
+    </script>
 </body>
 </html>
