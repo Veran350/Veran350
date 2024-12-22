@@ -307,6 +307,45 @@ footer ul li a:hover {
     margin-bottom: 10px;
 }
 
+/* New Product Management Styles */
+#product-management {
+    margin-top: 30px;
+}
+
+#product-management h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#product-management .button {
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#product-management .button.delete {
+    background-color: #FF5733;
+}
+
+.product-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.product-item {
+    background-color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     header .container {
