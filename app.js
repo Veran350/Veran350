@@ -1,22 +1,27 @@
+// Import necessary modules
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const firebase = require('firebase');
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+
 const app = express();
 const PORT = 3000;
 
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCtV0SOxHn_P3KYy8rV4IpgYhKvrtqddLc",
-    authDomain: "maoelementary-c6e57.firebaseapp.com",
-    projectId: "maoelementary-c6e57",
-    storageBucket: "maoelementary-c6e57.appspot.com",
-    messagingSenderId: "471682560547",
-    appId: "1:471682560547:web:your-app-id"
+    apiKey: "AIzaSyAFyzUobF12L-QlVnklN-2uYKvhwqXdkyE",
+    authDomain: "veran350-b6c53.firebaseapp.com",
+    projectId: "veran350-b6c53",
+    storageBucket: "veran350-b6c53.firebasestorage.app",
+    messagingSenderId: "727775684680",
+    appId: "1:727775684680:web:80f53b3b9c4ec3b6b1107d",
+    measurementId: "G-EQE584VHBY"
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const appFirebase = initializeApp(firebaseConfig);
+const auth = getAuth(appFirebase);
 
 // Middleware
 app.use(cors());
@@ -25,27 +30,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Mock products data
 const products = [
-    {
-        id: 1,
-        name: 'Product 1',
-        description: 'Description for Product 1',
-        price: 10.99,
-        imageUrl: 'https://via.placeholder.com/150'
-    },
-    {
-        id: 2,
-        name: 'Product 2',
-        description: 'Description for Product 2',
-        price: 20.99,
-        imageUrl: 'https://via.placeholder.com/150'
-    },
-    {
-        id: 3,
-        name: 'Product 3',
-        description: 'Description for Product 3',
-        price: 30.99,
-        imageUrl: 'https://via.placeholder.com/150'
-    }
+    { id: 1, name: 'Product 1', description: 'Description for Product 1', price: 10.99, imageUrl: 'https://via.placeholder.com/150' },
+    { id: 2, name: 'Product 2', description: 'Description for Product 2', price: 20.99, imageUrl: 'https://via.placeholder.com/150' },
+    { id: 3, name: 'Product 3', description: 'Description for Product 3', price: 30.99, imageUrl: 'https://via.placeholder.com/150' }
 ];
 
 // API endpoint to fetch products
@@ -80,8 +67,8 @@ app.delete('/cart', (req, res) => {
 // Sign-up route
 app.post('/signup', (req, res) => {
     const { email, password } = req.body;
-    
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+
+    createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
             res.status(201).json({ message: 'User created successfully!', user: userCredential.user });
         })
@@ -93,8 +80,8 @@ app.post('/signup', (req, res) => {
 // Login route
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    
-    firebase.auth().signInWithEmailAndPassword(email, password)
+
+    signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
             res.status(200).json({ message: 'Login successful!', user: userCredential.user });
         })
